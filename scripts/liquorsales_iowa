@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 
+# List to change data types for memory optimization 
 dtype_map = {
     "Store Number": "Int32",
     "County Number": "Int32",

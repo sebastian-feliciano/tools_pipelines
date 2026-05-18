@@ -1,0 +1,43 @@
+import pandas as pd
+import os
+
+dtype_map = {
+    "Store Number": "Int32",
+    "County Number": "Int32",
+    "Category": "float32",
+    "Vendor Number": "float32",
+    "Item Number": "int32",
+    "Pack": "int16",
+    "Bottle Volume (ml)": "int16",
+    "Bottles Sold": "int16",
+    "Volume Sold (Liters)": "float16",
+    "Volume Sold (Gallons)": "float16"
+}
+
+# Empty list for processed chunks
+chunks = []
+
+with pd.read_csv(
+    "data/Iowa_Liquor_Sales.csv", 
+    chunksize=10000,
+    dtype=dtype_map
+) as reader:
+    
+    for chunk in reader:
+
+        # Append chunk to list
+        chunks.append(chunk)
+
+# Combine all chunks into a single DataFrame
+df = pd.concat(chunks, ignore_index=True)
+
+# Run scripts here
+print(df.head())
+
+# Directory and filename output
+output_dir = "data"
+filename = "compressed_sales_data.txt"
+file_path = os.path.join(output_dir, filename)
+
+# Save DataFrame to text file
+df.to_csv(file_path, sep='\t', index=False)
